@@ -86,7 +86,12 @@ public:
     Fox(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), food(0)
     {
     }
-    // void food()
+    void food1() { food++; }
+    int get_food()
+    {
+        food++;
+        return food;
+    }
 };
 
 class Model
@@ -119,13 +124,35 @@ public:
             {
                 masR[r].changeD();
             }
+            if (i % masR[r].get_breed() == 0)
+            {
+                addR(masR[r].get_x() + 1, masR[r].get_y() + 1, masR[r].get_stability(), masR[r].get_direction());
+            }
             if (masR[r].get_age() == 50)
             {
                 masR.erase(masR.begin() + r);
             }
-            if (i % masR[r].get_breed() == 1)
+        }
+        // fox
+        unsigned NF = masF.size();
+        for (unsigned r = 0; r < NF; r++)
+        {
+            masF[r].move(n, m);
+            eating(masF[r]);
+            masF[r].move(n, m);
+            eating(masF[r]);
+            masF[r].age1();
+            if (i % masF[r].get_stability() == 0)
             {
-                addR(masR[r].get_x() + 1, masR[r].get_y() + 1, masR[r].get_stability(), masR[r].get_direction());
+                masF[r].changeD();
+            }
+            if (masF[r].get_food() == 2)
+            {
+                addF(masF[r].get_x() + 1, masF[r].get_y() + 1, masF[r].get_stability(), masF[r].get_direction());
+            }
+            if (masF[r].get_age() == 50)
+            {
+                masF.erase(masF.begin() + r);
             }
         }
     };
@@ -174,22 +201,33 @@ public:
     {
         masF.push_back(Fox(x, y, s, dir));
     }
+    void eating(Fox F)
+    {
+        for (unsigned i = 0; i < masR.size(); i++)
+        {
+            if (masR[i].get_x() == F.get_x() && masR[i].get_y() == F.get_y())
+            {
+                masF.erase(masF.begin() + i);
+                F.food1();
+            }
+        }
+    }
 };
 int main()
 {
     //  Ввод заданных значений для построения модели
     Model M(10, 20);
-    M.addR(5, 5, 15, 0);
+    M.addR(5, 5, 7, 1);
     // Ввод данных для зайцев и добавление зайцев (через объект класс Модель)
-    // M.addF(7, 7, 5, 0);
+    M.addF(1, 5, 5, 1);
     // Ввод данных для лис и добавление лис (через объект класс Модель)
     // ХОД
     int K = 50;
-    for (int i = 0; i < K; ++i)
+    for (int i = 1; i < K; ++i)
     {
         M.draw(i);
         M.step(i); // M - объект класса модель
-        Sleep(100);
+        Sleep(1000);
     }
     M.write();
     return 0;
