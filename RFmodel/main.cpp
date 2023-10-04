@@ -86,8 +86,10 @@ public:
     Fox(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), food(0)
     {
     }
-    void food1() { food++; }
-    void food_to_zero(){food=0;}
+    void food1()
+    {
+        food++;
+    }
     int get_food()
     {
         return food;
@@ -122,7 +124,7 @@ public:
                 addR(masR[r].get_x() + 1, masR[r].get_y() + 1, masR[r].get_stability(), masR[r].get_direction());
                 NR++;
             }
-            if (masR[r].get_age() == 5)
+            if (masR[r].get_age() == 50)
             {
                 masR.erase(masR.begin() + r);
                 NR--;
@@ -133,22 +135,23 @@ public:
         for (unsigned r = 0; r < NF; r++)
         {
             masF[r].move(n, m);
-            eating(masF[r]);
+            eating(&(masF[r]));
             masF[r].move(n, m);
-            eating(masF[r]);
+            eating(&(masF[r]));
             masF[r].age1();
             if (i % masF[r].get_stability() == 0)
             {
                 masF[r].changeD();
             }
-            if (masF[r].get_food()>=2)
+
+            if (masF[r].get_food() >= 2)
             {
-                addF(masF[r].get_x() + 1, masF[r].get_y() + 1, masF[r].get_stability(), masF[r].get_direction());
-                masF[r].food_to_zero();
+                addF(masF[r].get_x() + 2, masF[r].get_y() + 2, masF[r].get_stability(), masF[r].get_direction());
             }
             if (masF[r].get_age() == 50)
             {
                 masF.erase(masF.begin() + r);
+                NF--;
             }
         }
     };
@@ -160,14 +163,14 @@ public:
     {
         masF.push_back(Fox(x, y, s, dir));
     }
-    void eating(Fox F)
+    void eating(Fox *F)
     {
         for (unsigned i = 0; i < masR.size(); i++)
         {
-            if (masR[i].get_x() == F.get_x() && masR[i].get_y() == F.get_y())
+            if (masR[i].get_x() == F->get_x() && masR[i].get_y() == F->get_y())
             {
                 masR.erase(masR.begin() + i);
-                F.food1();
+                F->food1();
             }
         }
     }
