@@ -104,19 +104,20 @@ public:
     }
     void step(int i){
         //rabbit
-        for(unsigned r = 0;r<masR.size();r++){
+        unsigned NR = masR.size();
+        for(unsigned r = 0;r<NR;r++){
+            if(i%masR[r].get_breed()==0){
+                addR(masR[r].get_x(),masR[r].get_y(),masR[r].get_stability(),masR[r].get_age());
+            }
+            if(masR[r].get_age()==5){
+               masR.erase(masR.begin()+r); 
+            }
             if(i%masR[r].get_stability()==0){
                 masR[r].changeD();
             }
             masR[r].move(n,m);
-
             masR[r].age1();
-            if(masR[r].get_age()==5){
-               masR.erase(masR.begin()+r); 
-            }
-            if(i%masR[r].get_breed()==0){
-                addR(masR[r].get_x(),masR[r].get_y(),masR[r].get_stability(),masR[r].get_age());
-            }
+            
         }
     };
     void draw(int i)
