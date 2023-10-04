@@ -47,8 +47,6 @@ public:
             }
             break;
         }
-        // board out check
-        // check if fox up rabbit
     }
     void changeD()
     {
@@ -71,7 +69,7 @@ private:
     int breed;
 
 public:
-    Rabbit(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), breed(20)
+    Rabbit(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), breed(5)
     {
     }
     int get_breed() { return breed; }
@@ -122,9 +120,8 @@ public:
             if (i % masR[r].get_breed() == 0)
             {
                 addR(masR[r].get_x() + 1, masR[r].get_y() + 1, masR[r].get_stability(), masR[r].get_direction());
-                NR++;
             }
-            if (masR[r].get_age() == 50)
+            if (masR[r].get_age() == 10)
             {
                 masR.erase(masR.begin() + r);
                 NR--;
@@ -144,11 +141,11 @@ public:
                 masF[r].changeD();
             }
 
-            if (masF[r].get_food() >= 2)
+            if (masF[r].get_food() == 2)
             {
-                addF(masF[r].get_x() + 2, masF[r].get_y() + 2, masF[r].get_stability(), masF[r].get_direction());
+                addF(masF[r].get_x() + 1, masF[r].get_y() + 1, masF[r].get_stability(), masF[r].get_direction());
             }
-            if (masF[r].get_age() == 50)
+            if (masF[r].get_age() == 15)
             {
                 masF.erase(masF.begin() + r);
                 NF--;
@@ -214,13 +211,18 @@ public:
 };
 int main()
 {
+    int n, m;
+    std::cout << "Input height: ";
+    std::cin >> n;
+    std::cout << "Input weight: ";
+    std::cin >> m;
     //  Ввод заданных значений для построения модели
-    Model M(10, 20);
-    M.addR(5, 5, 7, 1);
-    M.addR(6, 5, 7, 1);
+    Model M(n, m);
+    M.addR(4, 2, 7, 1);
+    M.addR(5, 2, 7, 1);
     M.addR(7, 5, 7, 1);
     // Ввод данных для зайцев и добавление зайцев (через объект класс Модель)
-    M.addF(1, 5, 5, 1);
+    M.addF(1, 2, 5, 1);
     // Ввод данных для лис и добавление лис (через объект класс Модель)
     // ХОД
     int K = 1000;
@@ -228,7 +230,7 @@ int main()
     {
         M.draw(i);
         M.step(i); // M - объект класса модель
-        Sleep(200);
+        Sleep(500);
     }
     M.write();
     return 0;
