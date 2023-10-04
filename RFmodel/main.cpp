@@ -14,21 +14,33 @@ public:
     Animal(int x, int y, int stability, int direction) : x(x), y(y), stability(stability), direction(direction), age(0)
     {
     }
-    void move(int n)
+    void move(int max_n,int max_m)
     {
         switch (direction)
         {
         case 0:
-            y++;
+            y--;
+            if(y<0){
+                y = max_n-1;
+            }
             break;
         case 1:
             x++;
+            if(y==max_m){
+                x = 0;
+            }
             break;
         case 2:
-            y--;
+            y++;
+            if(y==max_n){
+                y = 0;
+            }
             break;
         case 3:
             x--;
+            if(x<0){
+                x = max_m-1;
+            }
             break;
         }
         // board out check
@@ -88,7 +100,11 @@ public:
             mas[i] = new int[m];
         }
     }
-    void step(int i){};
+    void step(int i){
+        for(unsigned r = 0;r<masR.size();r++){
+            masR[r].move(n,m);
+        }
+    };
     void draw(int i)
     {
         std:: cout << "Model step: " << i << std::endl;
