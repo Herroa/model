@@ -2,6 +2,7 @@
 #include <vector>
 #include <windows.h>
 
+#define FOOD_TO_BREED 2
 #define RABBIT_BREED 5
 #define RABBIT_AGE 10
 #define FOX_AGE 50
@@ -149,7 +150,7 @@ public:
                 masF[r].changeD();
             }
 
-            if (masF[r].get_food()>=2)
+            if (masF[r].get_food()>=FOOD_TO_BREED)
             {
                 addF(masF[r].get_x() + 1, masF[r].get_y() + 1, masF[r].get_stability(), masF[r].get_direction()+1);
                 masF[r].food_to_zero();
