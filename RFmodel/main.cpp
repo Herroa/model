@@ -128,7 +128,7 @@ public:
             }
             if (i % masR[r].get_breed() == 0)
             {
-                addR(masR[r].get_x() + 1, masR[r].get_y() + 1, masR[r].get_stability(), masR[r].get_direction()+1);
+                addR(masR[r].get_x(), masR[r].get_y(), masR[r].get_stability(), masR[r].get_direction()+1);
             }
             if (masR[r].get_age() == RABBIT_AGE)
             {
@@ -152,7 +152,7 @@ public:
 
             if (masF[r].get_food()>=FOOD_TO_BREED)
             {
-                addF(masF[r].get_x() + 1, masF[r].get_y() + 1, masF[r].get_stability(), masF[r].get_direction()+1);
+                addF(masF[r].get_x(), masF[r].get_y(), masF[r].get_stability(), masF[r].get_direction()+1);
                 masF[r].food_to_zero();
             }
             if (masF[r].get_age() == FOX_AGE)
@@ -240,7 +240,7 @@ int main()
     {
         M.draw(i);
         M.step(i);
-        Sleep(1);
+        Sleep(100);
     }
     M.write();
     return 0;
