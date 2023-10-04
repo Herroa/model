@@ -114,6 +114,7 @@ public:
     Model(int n, int m) : n(n), m(m)
     {
     }
+    ~Model(){}
     void step(int i)
     {
         // rabbit
