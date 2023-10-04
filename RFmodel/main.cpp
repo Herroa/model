@@ -66,7 +66,7 @@ private:
     int breed;
 
 public:
-    Rabbit(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), breed(3)
+    Rabbit(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), breed(25)
     {
     }
     int get_breed(){return breed;}
@@ -109,7 +109,7 @@ public:
             if(i%masR[r].get_breed()==0){
                 addR(masR[r].get_x(),masR[r].get_y(),masR[r].get_stability(),masR[r].get_age());
             }
-            if(masR[r].get_age()==5){
+            if(masR[r].get_age()==50){
                masR.erase(masR.begin()+r); 
             }
             if(i%masR[r].get_stability()==0){
@@ -132,12 +132,14 @@ public:
                     if((masR[r].get_x() == j) && (masR[r].get_y() == i)){
                         std::cout << 'R';
                         flag = 1;
+                        break;
                     }
                 }
                 for(unsigned r = 0;r<masF.size();r++){
                     if((masF[r].get_x() == j) && (masF[r].get_y() == i)){
                         std::cout << 'F';
                         flag = 1;
+                        break;
                     }
                 }
                 //проверять существует ли заяц или лиса на этой координате 'F' 'R'
@@ -154,29 +156,27 @@ public:
     void addR(int x, int y, int s, int dir)
     {
         masR.push_back(Rabbit(x, y, s, dir));
-        mas[x][y]++;
     }
     void addF(int x, int y, int s, int dir)
     {
         masF.push_back(Fox(x, y, s, dir));
-        mas[x][y]++;
     }
 };
 int main()
 {
     //  Ввод заданных значений для построения модели
-    Model M(10, 10);
-    M.addR(5, 5, 2, 0);
+    Model M(10, 100);
+    M.addR(5, 5, 100, 0);
     // Ввод данных для зайцев и добавление зайцев (через объект класс Модель)
     // M.addF(7, 7, 5, 0);
     // Ввод данных для лис и добавление лис (через объект класс Модель)
     // ХОД
-    int K = 20;
+    int K = 1000;
     for (int i = 0; i < K; ++i)
     {
         M.draw(i);
         M.step(i); // M - объект класса модель
-        Sleep(1000);
+        Sleep(100);
     }
     M.write();
     return 0;
