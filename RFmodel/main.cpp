@@ -71,7 +71,7 @@ private:
     int breed;
 
 public:
-    Rabbit(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), breed(10)
+    Rabbit(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), breed(20)
     {
     }
     int get_breed() { return breed; }
@@ -87,9 +87,9 @@ public:
     {
     }
     void food1() { food++; }
+    void food_to_zero(){food=0;}
     int get_food()
     {
-        food++;
         return food;
     }
 };
@@ -98,19 +98,12 @@ class Model
 {
 private:
     int n, m;
-    int turn;
     std::vector<Rabbit> masR;
     std::vector<Fox> masF;
-    int **mas;
 
 public:
-    Model(int n, int m) : n(n), m(m), turn(0)
+    Model(int n, int m) : n(n), m(m)
     {
-        mas = new int *[n];
-        for (int i = 0; i < n; i++)
-        {
-            mas[i] = new int[m];
-        }
     }
     void step(int i)
     {
@@ -127,10 +120,12 @@ public:
             if (i % masR[r].get_breed() == 0)
             {
                 addR(masR[r].get_x() + 1, masR[r].get_y() + 1, masR[r].get_stability(), masR[r].get_direction());
+                NR++;
             }
-            if (masR[r].get_age() == 50)
+            if (masR[r].get_age() == 5)
             {
                 masR.erase(masR.begin() + r);
+                NR--;
             }
         }
         // fox
@@ -146,9 +141,10 @@ public:
             {
                 masF[r].changeD();
             }
-            if (masF[r].get_food() == 2)
+            if (masF[r].get_food()>=2)
             {
                 addF(masF[r].get_x() + 1, masF[r].get_y() + 1, masF[r].get_stability(), masF[r].get_direction());
+                masF[r].food_to_zero();
             }
             if (masF[r].get_age() == 50)
             {
@@ -156,6 +152,26 @@ public:
             }
         }
     };
+    void addR(int x, int y, int s, int dir)
+    {
+        masR.push_back(Rabbit(x, y, s, dir));
+    }
+    void addF(int x, int y, int s, int dir)
+    {
+        masF.push_back(Fox(x, y, s, dir));
+    }
+    void eating(Fox F)
+    {
+        for (unsigned i = 0; i < masR.size(); i++)
+        {
+            if (masR[i].get_x() == F.get_x() && masR[i].get_y() == F.get_y())
+            {
+                masR.erase(masR.begin() + i);
+                F.food1();
+            }
+        }
+    }
+
     void draw(int i)
     {
         std::cout << "Model step: " << i << std::endl;
@@ -182,7 +198,6 @@ public:
                         break;
                     }
                 }
-                // проверять существует ли заяц или лиса на этой координате 'F' 'R'
                 if (!flag)
                 {
                     std::cout << '_';
@@ -193,41 +208,24 @@ public:
     }
 
     void write(){};
-    void addR(int x, int y, int s, int dir)
-    {
-        masR.push_back(Rabbit(x, y, s, dir));
-    }
-    void addF(int x, int y, int s, int dir)
-    {
-        masF.push_back(Fox(x, y, s, dir));
-    }
-    void eating(Fox F)
-    {
-        for (unsigned i = 0; i < masR.size(); i++)
-        {
-            if (masR[i].get_x() == F.get_x() && masR[i].get_y() == F.get_y())
-            {
-                masF.erase(masF.begin() + i);
-                F.food1();
-            }
-        }
-    }
 };
 int main()
 {
     //  Ввод заданных значений для построения модели
     Model M(10, 20);
     M.addR(5, 5, 7, 1);
+    M.addR(6, 5, 7, 1);
+    M.addR(7, 5, 7, 1);
     // Ввод данных для зайцев и добавление зайцев (через объект класс Модель)
     M.addF(1, 5, 5, 1);
     // Ввод данных для лис и добавление лис (через объект класс Модель)
     // ХОД
-    int K = 50;
+    int K = 1000;
     for (int i = 1; i < K; ++i)
     {
         M.draw(i);
         M.step(i); // M - объект класса модель
-        Sleep(1000);
+        Sleep(200);
     }
     M.write();
     return 0;
