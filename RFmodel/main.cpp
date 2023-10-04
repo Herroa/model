@@ -61,6 +61,7 @@ public:
     int get_x() { return x; }
     int get_y() { return y; }
     int get_stability() { return stability; }
+    int get_direction() { return direction; }
     int get_age() { return age; }
 };
 
@@ -124,7 +125,7 @@ public:
             }
             if (i % masR[r].get_breed() == 1)
             {
-                addR(masR[r].get_x()+1, masR[r].get_y()+1, masR[r].get_stability(), masR[r].get_age());
+                addR(masR[r].get_x() + 1, masR[r].get_y() + 1, masR[r].get_stability(), masR[r].get_direction());
             }
         }
     };
@@ -177,8 +178,8 @@ public:
 int main()
 {
     //  Ввод заданных значений для построения модели
-    Model M(10, 100);
-    M.addR(5, 5, 100, 0);
+    Model M(10, 20);
+    M.addR(5, 5, 15, 0);
     // Ввод данных для зайцев и добавление зайцев (через объект класс Модель)
     // M.addF(7, 7, 5, 0);
     // Ввод данных для лис и добавление лис (через объект класс Модель)
