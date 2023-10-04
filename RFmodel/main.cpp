@@ -7,7 +7,6 @@
 #define RABBIT_AGE 10
 #define FOX_AGE 50
 
-
 class Animal
 {
 private:
@@ -94,7 +93,8 @@ public:
     {
         food++;
     }
-    void food_to_zero(){
+    void food_to_zero()
+    {
         food = 0;
     }
     int get_food()
@@ -128,7 +128,7 @@ public:
             }
             if (i % masR[r].get_breed() == 0)
             {
-                addR(masR[r].get_x(), masR[r].get_y(), masR[r].get_stability(), masR[r].get_direction()+1);
+                addR(masR[r].get_x(), masR[r].get_y(), masR[r].get_stability(), masR[r].get_direction() + 1);
             }
             if (masR[r].get_age() == RABBIT_AGE)
             {
@@ -150,9 +150,9 @@ public:
                 masF[r].changeD();
             }
 
-            if (masF[r].get_food()>=FOOD_TO_BREED)
+            if (masF[r].get_food() >= FOOD_TO_BREED)
             {
-                addF(masF[r].get_x(), masF[r].get_y(), masF[r].get_stability(), masF[r].get_direction()+1);
+                addF(masF[r].get_x(), masF[r].get_y(), masF[r].get_stability(), masF[r].get_direction() + 1);
                 masF[r].food_to_zero();
             }
             if (masF[r].get_age() == FOX_AGE)
@@ -223,25 +223,30 @@ public:
 };
 int main()
 {
-    //10 20 100
-    int n, m, turns;
-    std::cout << "Input height: ";
-    std::cin >> n;
-    std::cout << "Input weight: ";
-    std::cin >> m;
-    std::cout << "Input turns: ";
-    std::cin >> turns;
-    Model M(n, m);
-    M.addR(4, 2, 7, 1);
-    M.addR(5, 2, 7, 1);
-    M.addR(7, 5, 7, 1);
-    M.addF(1, 2, 5, 1);
-    for (int i = 1; i < turns; ++i)
+    while (true)
     {
-        M.draw(i);
-        M.step(i);
-        Sleep(100);
+        // 10 20 100
+        int n, m, turns;
+        std::cout << "Input height: ";
+        std::cin >> n;
+        std::cout << "Input width: ";
+        std::cin >> m;
+        std::cout << "Input turns: ";
+        std::cin >> turns;
+        Model M(n, m);
+        M.addR(4, 3, 7, 1);
+        M.addR(5, 3, 7, 1);
+        M.addR(7, 5, 7, 1);
+        M.addF(1, 2, 5, 1);
+        for (int i = 1; i < turns; ++i)
+        {
+            M.draw(i);
+            M.step(i);
+            Sleep(100);
+        }
+        M.write();
+        system("pause");
     }
-    M.write();
+
     return 0;
 }
