@@ -2,6 +2,11 @@
 #include <vector>
 #include <windows.h>
 
+#define RABBIT_BREED 5
+#define RABBIT_AGE 10
+#define FOX_AGE 50
+
+
 class Animal
 {
 private:
@@ -27,14 +32,14 @@ public:
             break;
         case 1:
             x++;
-            if (x == max_m)
+            if (x >= max_m)
             {
                 x = 0;
             }
             break;
         case 2:
             y++;
-            if (y == max_n)
+            if (y >= max_n)
             {
                 y = 0;
             }
@@ -69,7 +74,7 @@ private:
     int breed;
 
 public:
-    Rabbit(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), breed(5)
+    Rabbit(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), breed(RABBIT_BREED)
     {
     }
     int get_breed() { return breed; }
@@ -87,6 +92,9 @@ public:
     void food1()
     {
         food++;
+    }
+    void food_to_zero(){
+        food = 0;
     }
     int get_food()
     {
@@ -119,9 +127,9 @@ public:
             }
             if (i % masR[r].get_breed() == 0)
             {
-                addR(masR[r].get_x() + 1, masR[r].get_y() + 1, masR[r].get_stability(), masR[r].get_direction());
+                addR(masR[r].get_x() + 1, masR[r].get_y() + 1, masR[r].get_stability(), masR[r].get_direction()+1);
             }
-            if (masR[r].get_age() == 10)
+            if (masR[r].get_age() == RABBIT_AGE)
             {
                 masR.erase(masR.begin() + r);
                 NR--;
@@ -141,11 +149,12 @@ public:
                 masF[r].changeD();
             }
 
-            if (masF[r].get_food() == 2)
+            if (masF[r].get_food()>=2)
             {
-                addF(masF[r].get_x() + 1, masF[r].get_y() + 1, masF[r].get_stability(), masF[r].get_direction());
+                addF(masF[r].get_x() + 1, masF[r].get_y() + 1, masF[r].get_stability(), masF[r].get_direction()+1);
+                masF[r].food_to_zero();
             }
-            if (masF[r].get_age() == 15)
+            if (masF[r].get_age() == FOX_AGE)
             {
                 masF.erase(masF.begin() + r);
                 NF--;
@@ -175,6 +184,8 @@ public:
     void draw(int i)
     {
         std::cout << "Model step: " << i << std::endl;
+        std::cout << "RABBITS " << masR.size() << std::endl;
+        std::cout << "FOXES " << masF.size() << std::endl;
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < m; j++)
@@ -211,26 +222,24 @@ public:
 };
 int main()
 {
-    int n, m;
+    //10 20 100
+    int n, m, turns;
     std::cout << "Input height: ";
     std::cin >> n;
     std::cout << "Input weight: ";
     std::cin >> m;
-    //  Ввод заданных значений для построения модели
+    std::cout << "Input turns: ";
+    std::cin >> turns;
     Model M(n, m);
     M.addR(4, 2, 7, 1);
     M.addR(5, 2, 7, 1);
     M.addR(7, 5, 7, 1);
-    // Ввод данных для зайцев и добавление зайцев (через объект класс Модель)
     M.addF(1, 2, 5, 1);
-    // Ввод данных для лис и добавление лис (через объект класс Модель)
-    // ХОД
-    int K = 1000;
-    for (int i = 1; i < K; ++i)
+    for (int i = 1; i < turns; ++i)
     {
         M.draw(i);
-        M.step(i); // M - объект класса модель
-        Sleep(500);
+        M.step(i);
+        Sleep(1);
     }
     M.write();
     return 0;
