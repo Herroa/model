@@ -42,6 +42,8 @@ public:
     {
         age++;
     }
+    int get_x(){return x;}
+    int get_y(){return y;}
 };
 
 class Rabbit : public Animal
@@ -73,14 +75,12 @@ class Model
 private:
     int n, m;
     int turn;
-    int quant_rab;
-    int quant_fox;
     std::vector<Rabbit> masR;
     std::vector<Fox> masF;
     int **mas;
 
 public:
-    Model(int n, int m) : n(n), m(m), turn(0), quant_rab(0), quant_fox(0)
+    Model(int n, int m) : n(n), m(m), turn(0)
     {
         mas = new int *[n];
         for (int i = 0; i < n; i++)
@@ -96,8 +96,24 @@ public:
         {
             for (int j = 0; j < m; j++)
             {
+                int flag = 0;
+                for(unsigned r = 0;r<masR.size();r++){
+                    if((masR[r].get_x() == j) && (masR[r].get_y() == i)){
+                        std::cout << 'R';
+                        flag = 1;
+                    }
+                }
+                for(unsigned r = 0;r<masF.size();r++){
+                    if((masF[r].get_x() == j) && (masF[r].get_y() == i)){
+                        std::cout << 'F';
+                        flag = 1;
+                    }
+                }
                 //проверять существует ли заяц или лиса на этой координате 'F' 'R'
-                std::cout << '_';
+                if(!flag){
+                    std::cout << '_';
+                }
+                
             }
             std::cout << std::endl;
         }
@@ -119,7 +135,6 @@ int main()
 {
     //  Ввод заданных значений для построения модели
     Model M(10, 10);
-    //  vector<Rabbit> masR;
     M.addR(5, 5, 5, 0);
     // Ввод данных для зайцев и добавление зайцев (через объект класс Модель)
     M.addF(7, 7, 5, 0);
