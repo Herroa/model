@@ -27,7 +27,7 @@ public:
             break;
         case 1:
             x++;
-            if (y == max_m)
+            if (x == max_m)
             {
                 x = 0;
             }
