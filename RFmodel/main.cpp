@@ -219,8 +219,6 @@ public:
             std::cout << std::endl;
         }
     }
-
-    void write(){};
 };
 int main()
 {
@@ -245,7 +243,6 @@ int main()
             M.step(i);
             Sleep(100);
         }
-        M.write();
         system("pause");
     }
 
