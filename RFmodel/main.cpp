@@ -114,8 +114,12 @@ public:
     Model(int n, int m) : n(n), m(m)
     {
     }
-    ~Model(){}
-    void step(int i)
+    ~Model() {}
+    void step(int i){
+        updateR(i);
+        updateF(i);
+    };
+    void updateR(int i)
     {
         // rabbit
         unsigned NR = masR.size();
@@ -137,6 +141,9 @@ public:
                 NR--;
             }
         }
+    }
+    void updateF(int i)
+    {
         // fox
         unsigned NF = masF.size();
         for (unsigned r = 0; r < NF; r++)
@@ -162,7 +169,7 @@ public:
                 NF--;
             }
         }
-    };
+    }
     void addR(int x, int y, int s, int dir)
     {
         masR.push_back(Rabbit(x, y, s, dir));
