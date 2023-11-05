@@ -20,6 +20,9 @@ int main()
         M.addR(5, 3, 7, 1);
         M.addR(7, 5, 7, 1);
         M.addF(1, 2, 5, 1);
+        for(int i = 0; i<(n*m)/10;i++){
+            M.addC();
+        }
         for (int i = 1; i < turns; ++i)
         {
             M.draw(i);
