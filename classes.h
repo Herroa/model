@@ -278,7 +278,7 @@ public:
                 {
                     if ((masW[r].get_x() == j) && (masW[r].get_y() == i))
                     {
-                        std::cout << 'F';
+                        std::cout << 'W';
                         flag = 1;
                         break;
                     }
