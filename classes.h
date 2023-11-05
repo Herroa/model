@@ -1,16 +1,38 @@
 #include <vector>
 #include <iostream>
 
-class Animal
+class Creature
 {
 protected:
     int x, y;
+
+public:
+    Creature(int x, int y) : x(x), y(y)
+    {
+    }
+    ~Creature() {}
+    int get_x() { return x; }
+    int get_y() { return y; }
+};
+
+class Cucumber : public Creature
+{
+public:
+    Cucumber(int x, int y) : Creature(x, y)
+    {
+    }
+    ~Cucumber() {}
+};
+
+class Animal : public Creature
+{
+protected:
     int stability;
     int direction;
     int age;
 
 public:
-    Animal(int x, int y, int stability, int direction) : x(x), y(y), stability(stability), direction(direction), age(0)
+    Animal(int x, int y, int stability, int direction) : Creature(x, y), stability(stability), direction(direction), age(0)
     {
     }
     ~Animal() {}
@@ -56,23 +78,22 @@ public:
     {
         age++;
     }
-    int get_x() { return x; }
-    int get_y() { return y; }
+
     int get_stability() { return stability; }
     int get_direction() { return direction; }
     int get_age() { return age; }
 };
 
-class Fox : public Animal
+class Wolf : public Animal
 {
-private:
+protected:
     int food;
 
 public:
-    Fox(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), food(0)
+    Wolf(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), food(0)
     {
     }
-    ~Fox(){}
+    ~Wolf() {}
     void food1()
     {
         food++;
@@ -89,32 +110,43 @@ public:
 
 class Rabbit : public Animal
 {
-private:
+protected:
     int breed;
 
 public:
     Rabbit(int x, int y, int stability, int direction) : Animal(x, y, stability, direction), breed(5)
     {
     }
-    ~Rabbit(){}
+    ~Rabbit() {}
     int get_breed() { return breed; }
 };
 
 class Model
 {
-private:
+protected:
     int n, m;
+    std::vector<Cucumber> masC;
     std::vector<Rabbit> masR;
-    std::vector<Fox> masF;
+    std::vector<Wolf> masW;
 
 public:
     Model(int n, int m) : n(n), m(m)
     {
     }
     ~Model() {}
-    void step(int i){
+    void step(int i)
+    {
+        updateC(i);
         updateR(i);
         updateF(i);
+    };
+
+
+    void updateC(int i)
+    {
+        if(i%2==0){
+            addC();
+        }
     };
     void updateR(int i)
     {
@@ -141,31 +173,35 @@ public:
     }
     void updateF(int i)
     {
-        // fox
-        unsigned NF = masF.size();
+        // Wolf
+        unsigned NF = masW.size();
         for (unsigned r = 0; r < NF; r++)
         {
-            masF[r].move(n, m);
-            eating(&(masF[r]));
-            masF[r].move(n, m);
-            eating(&(masF[r]));
-            masF[r].age1();
-            if (i % masF[r].get_stability() == 0)
+            masW[r].move(n, m);
+            eating(&(masW[r]));
+            masW[r].move(n, m);
+            eating(&(masW[r]));
+            masW[r].age1();
+            if (i % masW[r].get_stability() == 0)
             {
-                masF[r].changeD();
+                masW[r].changeD();
             }
 
-            if (masF[r].get_food() >= 2)
+            if (masW[r].get_food() >= 2)
             {
-                addF(masF[r].get_x(), masF[r].get_y(), masF[r].get_stability(), masF[r].get_direction() + 1);
-                masF[r].food_to_zero();
+                addF(masW[r].get_x(), masW[r].get_y(), masW[r].get_stability(), masW[r].get_direction() + 1);
+                masW[r].food_to_zero();
             }
-            if (masF[r].get_age() == 50)
+            if (masW[r].get_age() == 50)
             {
-                masF.erase(masF.begin() + r);
+                masW.erase(masW.begin() + r);
                 NF--;
             }
         }
+    }
+    void addC()
+    {
+        masC.push_back(Cucumber(rand()%n,rand()%m));
     }
     void addR(int x, int y, int s, int dir)
     {
@@ -173,16 +209,16 @@ public:
     }
     void addF(int x, int y, int s, int dir)
     {
-        masF.push_back(Fox(x, y, s, dir));
+        masW.push_back(Wolf(x, y, s, dir));
     }
-    void eating(Fox *F)
+    void eating(Wolf *W)
     {
         for (unsigned i = 0; i < masR.size(); i++)
         {
-            if (masR[i].get_x() == F->get_x() && masR[i].get_y() == F->get_y())
+            if (masR[i].get_x() == W->get_x() && masR[i].get_y() == W->get_y())
             {
                 masR.erase(masR.begin() + i);
-                F->food1();
+                W->food1();
             }
         }
     }
@@ -190,13 +226,23 @@ public:
     void draw(int i)
     {
         std::cout << "Model step: " << i << std::endl;
+        std::cout << "CUCUMBERS " << masC.size() << std::endl;
         std::cout << "RABBITS " << masR.size() << std::endl;
-        std::cout << "FOXES " << masF.size() << std::endl;
+        std::cout << "WolfES " << masW.size() << std::endl;
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < m; j++)
             {
                 int flag = 0;
+                for (unsigned r = 0; r < masC.size(); r++)
+                {
+                    if ((masC[r].get_x() == j) && (masC[r].get_y() == i))
+                    {
+                        std::cout << 'C';
+                        flag = 1;
+                        break;
+                    }
+                }
                 for (unsigned r = 0; r < masR.size(); r++)
                 {
                     if ((masR[r].get_x() == j) && (masR[r].get_y() == i))
@@ -206,9 +252,9 @@ public:
                         break;
                     }
                 }
-                for (unsigned r = 0; r < masF.size(); r++)
+                for (unsigned r = 0; r < masW.size(); r++)
                 {
-                    if ((masF[r].get_x() == j) && (masF[r].get_y() == i))
+                    if ((masW[r].get_x() == j) && (masW[r].get_y() == i))
                     {
                         std::cout << 'F';
                         flag = 1;
