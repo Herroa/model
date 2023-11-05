@@ -5,14 +5,20 @@ class Creature
 {
 protected:
     int x, y;
+    int age;
 
 public:
-    Creature(int x, int y) : x(x), y(y)
+    Creature(int x, int y) : x(x), y(y), age(0)
     {
     }
     ~Creature() {}
+    void age1()
+    {
+        age++;
+    }
     int get_x() { return x; }
     int get_y() { return y; }
+    int get_age() { return age; }
 };
 
 class Cucumber : public Creature
@@ -29,10 +35,9 @@ class Animal : public Creature
 protected:
     int stability;
     int direction;
-    int age;
 
 public:
-    Animal(int x, int y, int stability, int direction) : Creature(x, y), stability(stability), direction(direction), age(0)
+    Animal(int x, int y, int stability, int direction) : Creature(x, y), stability(stability), direction(direction)
     {
     }
     ~Animal() {}
@@ -74,14 +79,8 @@ public:
     {
         direction = (direction + 1) % 4;
     }
-    void age1()
-    {
-        age++;
-    }
-
     int get_stability() { return stability; }
     int get_direction() { return direction; }
-    int get_age() { return age; }
 };
 
 class Wolf : public Animal
@@ -141,11 +140,22 @@ public:
         updateF(i);
     };
 
-
     void updateC(int i)
     {
-        if(i%2==0){
+        if (i % 2 == 0)
+        {
             addC();
+        }
+        unsigned NC = masC.size();
+        for (unsigned r = 0; r < NC; r++)
+        {
+
+            masC[r].age1();
+            if (masC[r].get_age() == 5)
+            {
+                masC.erase(masC.begin() + r);
+                NC--;
+            }
         }
     };
     void updateR(int i)
@@ -155,6 +165,7 @@ public:
         for (unsigned r = 0; r < NR; r++)
         {
             masR[r].move(n, m);
+            eat_cucumber(&(masR[r]));
             masR[r].age1();
             if (i % masR[r].get_stability() == 0)
             {
@@ -178,9 +189,9 @@ public:
         for (unsigned r = 0; r < NF; r++)
         {
             masW[r].move(n, m);
-            eating(&(masW[r]));
+            eat_rabbit(&(masW[r]));
             masW[r].move(n, m);
-            eating(&(masW[r]));
+            eat_rabbit(&(masW[r]));
             masW[r].age1();
             if (i % masW[r].get_stability() == 0)
             {
@@ -201,7 +212,7 @@ public:
     }
     void addC()
     {
-        masC.push_back(Cucumber(rand()%n,rand()%m));
+        masC.push_back(Cucumber(rand() % n, rand() % m));
     }
     void addR(int x, int y, int s, int dir)
     {
@@ -211,7 +222,7 @@ public:
     {
         masW.push_back(Wolf(x, y, s, dir));
     }
-    void eating(Wolf *W)
+    void eat_rabbit(Wolf *W)
     {
         for (unsigned i = 0; i < masR.size(); i++)
         {
@@ -219,6 +230,17 @@ public:
             {
                 masR.erase(masR.begin() + i);
                 W->food1();
+            }
+        }
+    }
+    void eat_cucumber(Rabbit *R)
+    {
+        for (unsigned i = 0; i < masC.size(); i++)
+        {
+            if (masC[i].get_x() == R->get_x() && masC[i].get_y() == R->get_y())
+            {
+                masC.erase(masC.begin() + i);
+                addR(R->get_x(), R->get_y(), R->get_stability(), R->get_direction() + 1);
             }
         }
     }
